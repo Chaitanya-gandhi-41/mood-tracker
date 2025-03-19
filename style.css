@@ -1,0 +1,538 @@
+/* style.css */
+
+/* 1. Root Variables */
+:root {
+  /* Pastel Gradients */
+  --bg-gradient-start: #f9d7f5;
+  --bg-gradient-end: #fef5d4;
+
+  /* Light Colors */
+  --color-card-light: #ffffff;
+  --color-text-light: #333;
+  
+  /* Dark Colors */
+  --color-bg-dark: #1e1e1e;
+  --color-text-dark: #f0f0f0;
+
+  /* Shared */
+  --font-family: 'Poppins', sans-serif;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --border-radius-lg: 16px;
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
+
+  --transition-speed: 0.2s;
+}
+
+/* 2. Base & Global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font-family);
+  color: var(--color-text-light);
+  min-height: 100vh;
+}
+
+body {
+  background: linear-gradient(180deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #000;
+  color: #ffeb3b;
+}
+
+body.dark-mode .card {
+  background-color: #333;
+  color: #ffeb3b;
+}
+
+body.dark-mode .navbar {
+  background: #000;
+  color: #ffeb3b;
+}
+
+body.dark-mode .footer {
+  background: #000;
+  color: #ffeb3b;
+}
+
+body.dark-mode .btn,
+body.dark-mode .view-btn {
+  background-color: #000;
+  color: #ffeb3b;
+  border: 1px solid #ffeb3b;
+}
+
+body.dark-mode .btn:hover,
+body.dark-mode .view-btn:hover {
+  background-color: #ffeb3b;
+  color: #000;
+}
+
+/* 3. Navbar */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  background: linear-gradient(45deg, #f9d7f5, #fef5d4);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  margin-right: var(--spacing-sm);
+  object-fit: cover;
+}
+
+.app-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li {
+  margin-left: var(--spacing-md);
+}
+
+.nav-links a,
+.nav-links button {
+  text-decoration: none;
+  color: #444;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links button:hover {
+  background-color: rgba(255,255,255,0.3);
+}
+
+.active-link {
+  background-color: rgba(255,255,255,0.4);
+}
+
+.btn-logout {
+  background-color: #fff;
+  color: #444;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+/* 4. Container & Card */
+.container {
+  max-width: 600px;
+  margin: var(--spacing-md) auto;
+  padding: var(--spacing-md);
+}
+
+.card {
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 5. Buttons */
+.btn {
+  display: inline-block;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: #ff90b3;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #ff74a1;
+}
+
+.btn-secondary {
+  background-color: #ffd174;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #ffbd4d;
+}
+
+/* Delete button style */
+.btn-delete {
+  margin-top: var(--spacing-sm);
+  font-size: 0.85rem;
+}
+
+/* 6. Auth Pages */
+.auth-bg {
+  background: linear-gradient(180deg, #ffe4f2, #fff2c4);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-container {
+  text-align: center;
+}
+
+.auth-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.app-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+  color: #444;
+}
+
+.auth-card {
+  max-width: 350px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.auth-form {
+  text-align: left;
+}
+
+/* 7. Inputs */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+}
+
+.input-field {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* 8. Home Page */
+.greeting-section {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.greeting-text {
+  font-size: 1.6rem;
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
+}
+
+.quote-card {
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.dynamic-quote {
+  font-style: italic;
+  margin-bottom: var(--spacing-sm);
+  color: #666;
+}
+
+.mood-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.mood-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: var(--spacing-md);
+}
+
+.range-label {
+  font-weight: 500;
+}
+
+#moodRange {
+  width: 50%;
+}
+
+#moodValue {
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.emoji-selector {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.emoji-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.emoji-btn {
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.emoji-btn:hover {
+  transform: scale(1.2);
+}
+
+.emoji-btn.selected {
+  transform: scale(1.3);
+  outline: 2px solid #ff90b3;
+  border-radius: 50%;
+}
+
+/* 9. Timeline / History */
+.timeline-section {
+  margin-bottom: var(--spacing-md);
+}
+
+.view-options {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.view-btn {
+  background-color: #eee;
+  margin: 0 var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.view-btn:hover {
+  background-color: #ffdce9;
+}
+
+.active-view {
+  background-color: #ffb3c6;
+  color: #fff;
+}
+
+#timelineView {
+  margin-top: var(--spacing-md);
+}
+
+.feed-entry {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feed-emoji {
+  font-size: 2rem;
+  margin-right: var(--spacing-md);
+}
+
+.feed-info {
+  flex: 1;
+}
+
+.feed-date {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+}
+
+.feed-rating {
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-xs);
+  color: #555;
+}
+
+.feed-note {
+  font-size: 0.85rem;
+  color: #999;
+}
+
+/* 10. Analytics Page */
+.analytics-section {
+  text-align: center;
+}
+
+.analytics-content {
+  margin-top: var(--spacing-md);
+}
+
+.analytics-stats p {
+  margin-bottom: var(--spacing-sm);
+  font-weight: 600;
+}
+
+.emoji-breakdown {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0 0;
+}
+
+.emoji-breakdown li {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.breakdown-emoji {
+  margin-right: var(--spacing-sm);
+  font-size: 1.3rem;
+}
+
+/* 11. Calendar Page */
+.calendar-section {
+  text-align: center;
+}
+
+.calendar-container {
+  overflow-x: auto;
+}
+
+.calendar-table {
+  margin: var(--spacing-md) auto 0;
+  border-collapse: collapse;
+  min-width: 300px;
+  background-color: #fff;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #eee;
+  text-align: center;
+  padding: var(--spacing-sm);
+  width: 50px;
+  height: 60px;
+}
+
+.calendar-table th {
+  background-color: #ffdbe6;
+}
+
+.calendar-mood {
+  font-size: 1.2rem;
+}
+
+/* 12. Settings Page */
+.settings-section {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.divider {
+  margin: var(--spacing-md) 0;
+  border: none;
+  height: 1px;
+  background-color: #eee;
+}
+
+/* 13. Footer */
+.footer {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: #444;
+  margin-top: var(--spacing-md);
+}
+
+/* 14. Error / 404 */
+.error-bg {
+  background: linear-gradient(180deg, #ffe4f2, #fff2c4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.error-container {
+  text-align: center;
+}
+
+.error-container h1 {
+  font-size: 4rem;
+  color: #ff90b3;
+  margin-bottom: var(--spacing-md);
+}
+
+/* 15. Dark Mode Toggle Button */
+.dark-mode-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #000;
+  color: #ffeb3b;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 16. Utility Classes */
+.mt-sm {
+  margin-top: var(--spacing-sm);
+}
+.mt-md {
+  margin-top: var(--spacing-md);
+}

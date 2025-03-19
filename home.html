@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Home</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Top Navbar -->
+  <header class="navbar pastel-gradient">
+    <div class="nav-left">
+      <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+      <span class="app-name">Mood Tracker</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html" class="active-link">Home</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><button id="logoutBtn" class="btn-sm btn-logout">Logout</button></li>
+    </ul>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Greeting & Quote -->
+    <section class="greeting-section">
+      <!-- Greeting text will be updated by script.js -->
+      <h1 id="greetingText" class="greeting-text"></h1>
+      <div class="quote-card card">
+        <blockquote id="quoteBlock" class="dynamic-quote">Loading quote...</blockquote>
+        <button id="newQuoteBtn" class="btn btn-secondary mt-sm">New Quote</button>
+      </div>
+    </section>
+    
+    <!-- Mood Logging Card -->
+    <section class="mood-section card">
+      <h2 class="section-title">What emotion are you feeling now?</h2>
+      <div class="mood-input">
+        <label for="moodRange" class="range-label">Mood Scale (1-10):</label>
+        <input type="range" id="moodRange" min="1" max="10" value="5">
+        <span id="moodValue">5</span>
+      </div>
+      
+      <div class="emoji-selector">
+        <p>Select an Emoji:</p>
+        <div class="emoji-options">
+          <button class="emoji-btn" data-emoji="😊">😊</button>
+          <button class="emoji-btn" data-emoji="😢">😢</button>
+          <button class="emoji-btn" data-emoji="😐">😐</button>
+          <button class="emoji-btn" data-emoji="😃">😃</button>
+          <button class="emoji-btn" data-emoji="😠">😠</button>
+          <button class="emoji-btn" data-emoji="😍">😍</button>
+        </div>
+      </div>
+      <button id="logMoodBtn" class="btn btn-primary mt-md">Log Mood</button>
+    </section>
+    
+    <!-- Timeline (History) Card -->
+    <section class="timeline-section card">
+      <h2 class="section-title">Your Mood History</h2>
+      <div class="view-options mb-md">
+        <button class="view-btn btn-sm" data-view="day">Day</button>
+        <button class="view-btn btn-sm" data-view="week">Week</button>
+        <button class="view-btn btn-sm" data-view="month">Month</button>
+        <button class="view-btn btn-sm" data-view="calendar">Calendar</button>
+      </div>
+      <div id="timelineView"></div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer pastel-gradient">
+    <p>Made by Chaitanya Gandhi</p>
+  </footer>
+
+  <!-- Dark Mode Toggle Button -->
+  <button id="darkModeToggle" class="dark-mode-toggle">Toggle Dark Mode</button>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Authentication check
+      if (!localStorage.getItem('mt_username')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Greeting: "Hey, [username], today is [day]"
+      const username = localStorage.getItem('mt_username');
+      const todayName = new Date().toLocaleDateString(undefined, { weekday: 'long' });
+      document.getElementById('greetingText').textContent = `Hey, ${username}, today is ${todayName}`;
+      
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('mt_username');
+        window.location.href = 'login.html';
+      });
+      
+      // Emoji selection
+      let selectedEmoji = null;
+      document.querySelectorAll('.emoji-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('selected'));
+          this.classList.add('selected');
+          selectedEmoji = this.dataset.emoji;
+        });
+      });
+      
+      // Mood range display
+      const moodRange = document.getElementById('moodRange');
+      const moodValue = document.getElementById('moodValue');
+      moodRange.addEventListener('input', function() {
+        moodValue.textContent = this.value;
+      });
+      
+      // Log mood button
+      document.getElementById('logMoodBtn').addEventListener('click', function() {
+        if (!selectedEmoji) {
+          alert('Please select an emoji.');
+          return;
+        }
+        const rating = moodRange.value;
+        const today = new Date();
+        logMood(today, rating, selectedEmoji);
+        alert('Mood logged successfully!');
+        displayTimeline(currentView);
+      });
+      
+      // View toggle for timeline
+      let currentView = 'day';
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active-view'));
+          this.classList.add('active-view');
+          currentView = this.dataset.view;
+          displayTimeline(currentView);
+        });
+      });
+      document.querySelector('[data-view="day"]').classList.add('active-view');
+      
+      // Initial timeline display
+      displayTimeline(currentView);
+      
+      // Fetch initial quote from quotable.io
+      fetchQuote();
+      document.getElementById('newQuoteBtn').addEventListener('click', fetchQuote);
+
+      // Dark mode toggle (black & yellow theme)
+      document.getElementById('darkModeToggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        // Save preference
+        localStorage.setItem('mt_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+      });
+
+      // Set theme based on saved value
+      if (localStorage.getItem('mt_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+      }
+    });
+  </script>
+</body>
+</html>

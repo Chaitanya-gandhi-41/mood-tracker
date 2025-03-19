@@ -1,0 +1,97 @@
+<!-- analytics.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Analytics</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar pastel-gradient">
+    <div class="nav-left">
+      <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+      <span class="app-name">Mood Tracker</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="analytics.html" class="active-link">Analytics</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><button id="logoutBtn" class="btn-sm btn-logout">Logout</button></li>
+    </ul>
+  </header>
+  
+  <div class="container">
+    <section class="analytics-section card">
+      <h2>Your Mood Analytics</h2>
+      <div id="analyticsContent" class="analytics-content">
+        <!-- Stats and breakdown here -->
+      </div>
+    </section>
+  </div>
+  
+  <footer class="footer pastel-gradient">
+    <p>&copy; 2025 Mood Tracker. All rights reserved.</p>
+  </footer>
+  
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!localStorage.getItem('mt_username')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('mt_username');
+        window.location.href = 'login.html';
+      });
+      
+      generateAnalytics();
+    });
+    
+    function generateAnalytics() {
+      const analyticsDiv = document.getElementById('analyticsContent');
+      const logsStr = localStorage.getItem('mt_moodLogs');
+      let logs = logsStr ? JSON.parse(logsStr) : [];
+      
+      if (logs.length === 0) {
+        analyticsDiv.innerHTML = '<p>No mood logs available.</p>';
+        return;
+      }
+      
+      let totalRating = 0;
+      const emojiCount = {};
+      
+      logs.forEach(log => {
+        totalRating += parseInt(log.rating, 10);
+        emojiCount[log.emoji] = (emojiCount[log.emoji] || 0) + 1;
+      });
+      
+      const avgRating = (totalRating / logs.length).toFixed(1);
+      
+      let breakdownHTML = '<h3>Emoji Breakdown</h3><ul class="emoji-breakdown">';
+      for (let emoji in emojiCount) {
+        const count = emojiCount[emoji];
+        const percentage = ((count / logs.length) * 100).toFixed(1);
+        breakdownHTML += `
+          <li>
+            <span class="breakdown-emoji">${emoji}</span>
+            <span>${percentage}% (${count} entries)</span>
+          </li>`;
+      }
+      breakdownHTML += '</ul>';
+      
+      analyticsDiv.innerHTML = `
+        <div class="analytics-stats">
+          <p><strong>Total Moods Logged:</strong> ${logs.length}</p>
+          <p><strong>Average Mood Rating:</strong> ${avgRating}</p>
+        </div>
+        ${breakdownHTML}
+      `;
+    }
+  </script>
+</body>
+</html>

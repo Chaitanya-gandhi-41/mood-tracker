@@ -1,0 +1,63 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="auth-bg">
+  <div class="auth-container">
+    <img src="assets/logo.png" alt="Logo" class="auth-logo" />
+    <h1 class="app-title">Mood Tracker</h1>
+
+    <div class="card auth-card">
+      <h2>Login</h2>
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" class="input-field" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="input-field" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
+      <p class="mt-md">Don’t have an account? <a href="register.html">Register now</a></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Redirect if already logged in
+      if (localStorage.getItem('mt_username')) {
+        window.location.href = 'home.html';
+        return;
+      }
+      
+      // Handle login form submission
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        
+        // Get users from local storage
+        const users = JSON.parse(localStorage.getItem('mt_users') || '[]');
+        
+        // Check if user exists and password matches
+        const user = users.find(u => u.username === username && u.password === password);
+        
+        if (user) {
+          login(username); // from script.js
+        } else {
+          alert('Invalid username or password!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

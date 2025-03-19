@@ -1,0 +1,125 @@
+<!-- settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Settings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar pastel-gradient">
+    <div class="nav-left">
+      <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+      <span class="app-name">Mood Tracker</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="calendar.html">Calendar</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+      <li><a href="settings.html" class="active-link">Settings</a></li>
+      <li><button id="logoutBtn" class="btn-sm btn-logout">Logout</button></li>
+    </ul>
+  </header>
+  
+  <div class="container">
+    <section class="settings-section card">
+      <h2>User Settings</h2>
+      
+      <div class="form-group">
+        <label for="usernameDisplay">Username:</label>
+        <input type="text" id="usernameDisplay" class="input-field" readonly />
+      </div>
+      
+      <div class="form-group">
+        <label for="themeSetting">Theme:</label>
+        <select id="themeSetting" class="input-field">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+
+      <hr class="divider" />
+      <h3>Change Password</h3>
+      <div class="form-group">
+        <label for="oldPassword">Current Password:</label>
+        <input type="password" id="oldPassword" class="input-field" placeholder="Enter current password" />
+      </div>
+      <div class="form-group">
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" class="input-field" placeholder="Enter new password" />
+      </div>
+      <button id="changePasswordBtn" class="btn btn-primary">Update Password</button>
+
+      <button id="saveSettingsBtn" class="btn btn-secondary mt-md">Save Settings</button>
+    </section>
+  </div>
+  
+  <footer class="footer pastel-gradient">
+    <p>&copy; 2025 Mood Tracker. All rights reserved.</p>
+  </footer>
+  
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!localStorage.getItem('mt_username')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const username = localStorage.getItem('mt_username');
+      document.getElementById('usernameDisplay').value = username;
+      
+      // Logout
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('mt_username');
+        window.location.href = 'login.html';
+      });
+      
+      // Theme
+      const themeSetting = document.getElementById('themeSetting');
+      const savedTheme = localStorage.getItem('mt_theme') || 'dark';
+      themeSetting.value = savedTheme;
+      
+      document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+        const selectedTheme = themeSetting.value;
+        localStorage.setItem('mt_theme', selectedTheme);
+        document.body.className = (selectedTheme === 'light') ? 'light-theme' : '';
+        alert('Settings saved successfully!');
+      });
+
+      // Change Password
+      document.getElementById('changePasswordBtn').addEventListener('click', function() {
+        const oldPassword = document.getElementById('oldPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        
+        if (!oldPassword || !newPassword) {
+          alert("Please enter both old and new passwords.");
+          return;
+        }
+        
+        let users = JSON.parse(localStorage.getItem('mt_users') || '[]');
+        let currentUser = users.find(u => u.username === username);
+        
+        if (!currentUser) {
+          alert("User not found in localStorage (unexpected).");
+          return;
+        }
+        
+        if (currentUser.password !== oldPassword) {
+          alert("Current password is incorrect!");
+          return;
+        }
+        
+        currentUser.password = newPassword;
+        localStorage.setItem('mt_users', JSON.stringify(users));
+        alert("Password updated successfully!");
+        
+        document.getElementById('oldPassword').value = '';
+        document.getElementById('newPassword').value = '';
+      });
+    });
+  </script>
+</body>
+</html>

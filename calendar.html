@@ -1,0 +1,126 @@
+<!-- calendar.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Calendar</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar pastel-gradient">
+    <div class="nav-left">
+      <img src="assets/logo.png" alt="Logo" class="nav-logo" />
+      <span class="app-name">Mood Tracker</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="calendar.html" class="active-link">Calendar</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+      <li><a href="settings.html">Settings</a></li>
+      <li><button id="logoutBtn" class="btn-sm btn-logout">Logout</button></li>
+    </ul>
+  </header>
+  
+  <div class="container">
+    <section class="calendar-section card">
+      <h2>Mood Calendar</h2>
+      <div id="calendarContainer" class="calendar-container">
+        <!-- Calendar will be generated here -->
+      </div>
+    </section>
+  </div>
+  
+  <footer class="footer pastel-gradient">
+    <p>&copy; 2025 Mood Tracker. All rights reserved.</p>
+  </footer>
+  
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (!localStorage.getItem('mt_username')) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('mt_username');
+        window.location.href = 'login.html';
+      });
+      
+      generateCalendar();
+    });
+    
+    function generateCalendar() {
+      const container = document.getElementById('calendarContainer');
+      container.innerHTML = '';
+      
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+      
+      const table = document.createElement('table');
+      table.className = 'calendar-table';
+      
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      daysOfWeek.forEach(day => {
+        const th = document.createElement('th');
+        th.textContent = day;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+      
+      const logs = getMoodLogs();
+      const moodMap = {};
+      logs.forEach(log => {
+        const logDate = new Date(log.date);
+        if (logDate.getMonth() === month && logDate.getFullYear() === year) {
+          moodMap[logDate.getDate()] = { rating: log.rating, emoji: log.emoji };
+        }
+      });
+      
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const tbody = document.createElement('tbody');
+      let row = document.createElement('tr');
+      
+      for (let i = 0; i < firstDay.getDay(); i++) {
+        const emptyCell = document.createElement('td');
+        row.appendChild(emptyCell);
+      }
+      
+      for (let date = 1; date <= lastDay.getDate(); date++) {
+        if (row.children.length === 7) {
+          tbody.appendChild(row);
+          row = document.createElement('tr');
+        }
+        const cell = document.createElement('td');
+        cell.textContent = date;
+        if (moodMap[date]) {
+          const moodDiv = document.createElement('div');
+          moodDiv.className = 'calendar-mood';
+          moodDiv.textContent = moodMap[date].emoji;
+          const ratingDiv = document.createElement('div');
+          ratingDiv.className = 'calendar-rating';
+          ratingDiv.textContent = `(${moodMap[date].rating})`;
+          cell.appendChild(moodDiv);
+          cell.appendChild(ratingDiv);
+        }
+        row.appendChild(cell);
+      }
+      
+      while (row.children.length < 7) {
+        const emptyCell = document.createElement('td');
+        row.appendChild(emptyCell);
+      }
+      tbody.appendChild(row);
+      table.appendChild(tbody);
+      container.appendChild(table);
+    }
+  </script>
+</body>
+</html>

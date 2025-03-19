@@ -1,0 +1,70 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Tracker - Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="auth-bg">
+  <div class="auth-container">
+    <img src="assets/logo.png" alt="Logo" class="auth-logo" />
+    <h1 class="app-title">Create an Account</h1>
+    
+    <div class="card auth-card">
+      <h2>Register</h2>
+      <form class="auth-form">
+        <div class="form-group">
+          <label for="usernameInput">Username</label>
+          <input type="text" id="usernameInput" class="input-field" required placeholder="Your Username">
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" class="input-field" required placeholder="Your Password">
+        </div>
+        <button id="registerButton" class="btn btn-primary">Sign Up</button>
+      </form>
+      <p class="mt-md">Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem('mt_username')) {
+        window.location.href = 'home.html';
+        return;
+      }
+
+      document.getElementById('registerButton').addEventListener('click', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('usernameInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
+        
+        if (!username || !password) {
+          alert("Please enter a valid username and password.");
+          return;
+        }
+
+        // Retrieve existing users
+        let users = JSON.parse(localStorage.getItem('mt_users') || '[]');
+
+        // Check if user already exists
+        if (users.find(u => u.username === username)) {
+          alert("Username already exists. Please choose another one.");
+          return;
+        }
+
+        // Add new user
+        users.push({ username, password });
+        localStorage.setItem('mt_users', JSON.stringify(users));
+        
+        // Log in automatically
+        localStorage.setItem('mt_username', username);
+        window.location.href = 'home.html';
+      });
+    });
+  </script>
+</body>
+</html>
